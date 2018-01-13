@@ -62,12 +62,7 @@
             "args": [
                 "Write-Host 'Invoking PSake...'; Invoke-PSake build.ps1 -taskList Build;",
                 "Invoke-Command { Write-Host 'Completed Build task in task runner.' }"
-            ],
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            ]
         },
         {
             "taskName": "Publish",

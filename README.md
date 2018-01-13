@@ -1,5 +1,7 @@
 # Widnows baseline check script
 
+[![Build status](https://ci.appveyor.com/api/projects/status/kn804byw0r2viqpi?svg=true)](https://ci.appveyor.com/project/edxi/baselinecheck)
+
 The purpose of this script which is provides windows baseline check functions.
 
 ## Features

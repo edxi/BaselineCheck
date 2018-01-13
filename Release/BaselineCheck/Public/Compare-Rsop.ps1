@@ -41,6 +41,7 @@ function Compare-Rsop {
     )
 
     begin {
+        $csvfile
         while ($csvfile[0] -eq '') {$csvfile = Get-FileName}
         & "$env:windir\system32\gpresult.exe" /x $env:TEMP\results.xml /f
     }
