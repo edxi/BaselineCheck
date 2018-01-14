@@ -3,8 +3,8 @@
     Load a pre-defined .csv file to check baseline item with RSOP xml outputs.
 
     .DESCRIPTION
-    Reads input from .csv file
-    Runs gpresult.exe to generates RSOP xml.
+    Read input from .csv file
+    Run gpresult.exe to generate RSOP xml.
     Compare items in .csv file with RSOP xml.
     Output compare results to report csv file with hostname-datetime.
 
@@ -42,26 +42,38 @@ function Compare-Rsop {
 
     begin {
         while ($csvfile[0] -eq '') {$csvfile = Get-FileName}
-        & "$env:windir\system32\gpresult.exe" /x $env:TEMP\results.xml /f
+        & "$env:windir\system32\gpresult.exe" /scope COMPUTER /x $env:TEMP\results.xml /f
+        $allGpoSettings = @()
     }
 
     process {
         # Import GP items from .csv file
-        $allGpoSettings = @()
         foreach ($acsvfile in $csvfile) {
             $allGpoSettings += Import-Csv -Path $acsvfile
         }
 
-        $allGpoSettings | Where-Object {$_.Extension -ne ''-and $_.Where -ne '' -and $_.Is -ne ''} | ForEach-Object {
-            Find-RsopSetting -rsopxml ..\Tests\results.xml `
+        if (($allGpoSettings |Get-Member -MemberType 'NoteProperty' | Select-Object -ExpandProperty 'Name') -notcontains 'Actual Value') {
+            $allGpoSettings | Add-Member -Name "Actual Value" -MemberType NoteProperty
+        }
+        if (($allGpoSettings |Get-Member -MemberType 'NoteProperty' | Select-Object -ExpandProperty 'Name') -notcontains 'Check Result') {
+            $allGpoSettings | Add-Member -Name "Check Result" -MemberType NoteProperty
+        }
+        $allGpoSettings | Where-Object {$_.Extension -ne ''-and $_.Where -ne '' -and $_.Is -ne '' -and $_.Return -ne ''} | ForEach-Object {
+            $_.'Actual Value' = Find-RsopSetting -rsopxml $env:TEMP\results.xml `
                 -Extension $_.Extension `
                 -Where $_.Where `
                 -Is $_.Is `
                 -Return $_.Return
-            $_.ItemName
+            if ($_.'Actual Value' -eq $_.'Baseline Value'){
+                $_.'Check Result' = 'Compliance'
+            }
+            else {
+                $_.'Check Result' = 'Not Compliance'
+            }
         }
     }
 
     end {
+        $allGpoSettings | Export-Csv -Path "$env:TEMP\$env:COMPUTERNAME-$(Get-Date -UFormat "%Y%m%d-%H%M%S").csv" -NoTypeInformation
     }
 }
