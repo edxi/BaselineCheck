@@ -13,11 +13,8 @@ os: WMF 5
 skip_commits:
   message: /updated readme.*/
 
-install:
-  - cinst pester -y
-
 build: false
 
+#Kick off the CI/CD pipeline
 test_script:
-# Test with native PS version
-  - ps: . .\Tests\appveyor.pester.ps1 -Test -Finalize
+  - ps: . .\build\Start-Build.ps1 -Task Deploy

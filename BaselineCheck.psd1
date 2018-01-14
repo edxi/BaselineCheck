@@ -12,7 +12,7 @@
 RootModule = 'BaselineCheck.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2018 edxi. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PowerShell module for baseline check as compare gpresult xml, etc.'
+Description = 'Baseline check as compare gpresult xml, etc.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -107,7 +107,7 @@ PrivateData = @{
         IconUri = 'https://github.com/edxi/BaselineCheck/Images/PowerShell_icon.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = '# Release Notes for Windows Baseline Check Script'
+        ReleaseNotes = 'https://github.com/edxi/BaselineCheck/releases'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
