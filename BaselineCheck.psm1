@@ -1,35 +1,20 @@
-#Module vars
-$ModulePath = $PSScriptRoot
-
 #Get public and private function definition files.
-    $Public  = Get-ChildItem $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue
-    $Private = Get-ChildItem $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue
-    [string[]]$PrivateModules = Get-ChildItem $PSScriptRoot\Private -ErrorAction SilentlyContinue |
-        Where-Object {$_.PSIsContainer} |
-        Select -ExpandProperty FullName
+$Public = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -ErrorAction SilentlyContinue )
+$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -ErrorAction SilentlyContinue )
 
-# Dot source the files
-    Foreach($import in @($Public + $Private))
-    {
-        Try
-        {
-            . $import.fullname
-        }
-        Catch
-        {
-            Write-Error "Failed to import function $($import.fullname): $_"
-        }
+#Dot source the files
+Foreach ($import in @($Public + $Private)) {
+    Try {
+        . $import.fullname
     }
+    Catch {
+        Write-Error -Message "Failed to import function $($import.fullname): $_"
+    }
+}
 
-# Load up dependency modules
-    foreach($Module in $PrivateModules)
-    {
-        Try
-        {
-            Import-Module $Module -ErrorAction Stop
-        }
-        Catch
-        {
-            Write-Error "Failed to import module $Module`: $_"
-        }
-    }
+# Here I might...
+# Read in or create an initial config file and variable
+# Export Public functions ($Public.BaseName) for WIP modules
+# Set variables visible to the module and its functions only
+
+Export-ModuleMember -Function $Public.Basename

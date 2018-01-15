@@ -83,7 +83,6 @@ Properties {
         (Split-Path $PSCommandPath -Leaf),
         'Release',
         'Tests',
-        'Build'
         '.git*',
         '.vscode',
         # These files are unique to this examples dir.

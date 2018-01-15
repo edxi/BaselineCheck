@@ -10,10 +10,10 @@ The purpose of this script which is provides windows baseline check functions.
 * Compare GP settings.
   * To reads a given GP setting in a specifying format file.
   * Compare the GP setting items to check compliance.
-* Invoke baseline check script.
+* Invoke baseline check script. (in progress...)
   * To reads a given windows baseline scripts in a specifying format files.
   * Invoke scripts to compare target result to check compliance.
-* Export compliance check to a report csv as a result.
+* Export compliance check to a report csv as a result. (in progress)
 
 ## Examples
 
@@ -57,34 +57,7 @@ Find-RsopSetting -rsopxml $rsopxml -Extension 'Auditing' -Where 'SubcategoryName
 
 ### Compare RSOP Items
 
-As most of baseline setting is part of group policy, this function could call gpresult and compare generated xml with a predefined .csv file.
-The predefined .csv file should includes at least four columns:
-
-* `Extension` - Identify the extesion namespace.
-* `Where` - Element name which looking for.
-* `Is` - Element content which looking for.
-* `Return` - Element content would be return.
-
-```powershell
-Compare-Rsop -csvfile c:\temp\baseline.csv
-```
-
-This will generate a report csv file in `$env:TEMP`, based on inputed c:\temp\baseline.csv file.
-
-### Compare Script Output
-
-Some baseline setting could only be checked by script.
-A predefined .csv file should includes a column `Script` to store the script block.
-The script block need return a hash object, includes:
-
-* `Actual Value` - The script gets the actual avalue from system according to checking item.
-* `Check Result` - As compared to baseline value, the result of compliance or not.
-
-```powershell
-Compare-ScriptOutput -csvfile c:\temp\baseline.csv
-```
-
-This will generate a report csv file in `$env:TEMP`, based on inputed c:\temp\baseline.csv file.
+Writing Compare-Rsop.ps1 In progress...
 
 ## Feedback
 
