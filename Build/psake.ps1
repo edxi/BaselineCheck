@@ -18,16 +18,40 @@ Properties {
     {
         $Verbose = @{Verbose = $True}
     }
+
+    # The directory used to publish the module from.  If you are using Git, the
+    # $PublishRootDir should be ignored if it is under the workspace directory.
+    $PublishRootDir = "$ProjectRoot\Release"
+    $PublishDir     = "$PublishRootDir\$ENV:BHProjectName"
+    $ENV:PublishDir = $PublishDir
+
+    # The following items will not be copied to the $PublishDir.
+    # Add items that should not be published with the module.
+    $Exclude = @(
+    (Split-Path $PSCommandPath -Leaf),
+    'Release',
+    'Tests',
+    'Build'
+    '.git*',
+    '.vscode',
+    # These files are unique to this examples dir.
+    'DebugTest.ps1',
+    'appveyor.yml'
+    'Build.ps1'
+    )
 }
 
 Task Default -Depends Test
 
-Task Init {
+Task Init -requiredVariables PublishDir {
     $lines
     Set-Location $ProjectRoot
     "Build System Details:"
     Get-Item ENV:BH*
     "`n"
+    if (!(Test-Path $PublishDir)) {
+        $null = New-Item $PublishDir -ItemType Directory
+    }
 }
 
 Task Test -Depends Init  {
@@ -56,20 +80,30 @@ Task Test -Depends Init  {
     "`n"
 }
 
-Task Build -Depends Test {
+Task Clean -requiredVariables PublishRootDir {
+    # Sanity check the dir we are about to "clean".  If $PublishRootDir were to
+    # inadvertently get set to $null, the Remove-Item commmand removes the
+    # contents of \*.  That's a bad day.  Ask me how I know?  :-(
+    if ((Test-Path $PublishRootDir) -and $PublishRootDir.Contains($PSScriptRoot)) {
+        Remove-Item $PublishRootDir\* -Recurse -Force
+    }
+}
+
+Task Build -Depends Clean, Test -requiredVariables PublishDir, Exclude {
     $lines
-    
+
     # Load the module, read the exported functions, update the psd1 FunctionsToExport
     Set-ModuleFunctions
 
     # Bump the module version if we didn't already
     Try
     {
-        $GalleryVersion = Get-NextPSGalleryVersion -Name $env:BHProjectName -ErrorAction Stop
+        $GalleryVersion = Get-NextNugetPackageVersion -Name $env:BHProjectName -ErrorAction Stop
         $GithubVersion = Get-MetaData -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -ErrorAction Stop
         if($GalleryVersion -ge $GithubVersion) {
             Update-Metadata -Path $env:BHPSModuleManifest -PropertyName ModuleVersion -Value $GalleryVersion -ErrorAction stop
         }
+        Copy-Item -Path $PSScriptRoot\* -Destination $PublishDir -Recurse -Exclude $Exclude
     }
     Catch
     {

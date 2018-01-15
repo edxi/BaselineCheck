@@ -12,7 +12,7 @@
 RootModule = 'BaselineCheck.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.2'
+ModuleVersion = '0.1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,16 +69,17 @@ PowerShellVersion = '3.0'
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+# FunctionsToExport = '*'
+FunctionsToExport = @('Compare-Rsop','Compare-ScriptOutput','Find-RsopSetting','Find-XmlNodes')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+# CmdletsToExport = '*'
 
 # Variables to export from this module
 # VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+# AliasesToExport = '*'
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -98,7 +99,7 @@ PrivateData = @{
         Tags = @()
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/edxi/BaselineCheck/license'
+        LicenseUri = 'https://github.com/edxi/BaselineCheck/blob/master/LICENSE'
 
         # A URL to the main website for this project.
         ProjectUri = 'https://github.com/edxi/BaselineCheck/'

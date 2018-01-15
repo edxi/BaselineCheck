@@ -58,7 +58,8 @@ function Compare-Rsop {
         if (($allGpoSettings |Get-Member -MemberType 'NoteProperty' | Select-Object -ExpandProperty 'Name') -notcontains 'Check Result') {
             $allGpoSettings | Add-Member -Name "Check Result" -MemberType NoteProperty
         }
-        $allGpoSettings | Where-Object {$_.Extension -ne ''-and $_.Where -ne '' -and $_.Is -ne '' -and $_.Return -ne ''} | ForEach-Object {
+
+        $allGpoSettings | Where-Object {$_.Extension -ne ''-and $_.Where -ne '' -and $_.Is -ne '' -and $_.Return -ne '' -and $_.'Baseline Value' -ne ''} | ForEach-Object {
             $_.'Actual Value' = Find-RsopSetting -rsopxml $env:TEMP\results.xml `
                 -Extension $_.Extension `
                 -Where $_.Where `

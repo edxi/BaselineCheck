@@ -39,20 +39,30 @@ function Compare-ScriptOutput {
 
     begin {
         while ($csvfile[0] -eq '') {$csvfile = Get-FileName}
+        $allBaselineSettings = @()
     }
 
     process {
         # Import baseline items from .csv file
-        $allBaselineSettings = @()
         foreach ($acsvfile in $csvfile) {
             $allBaselineSettings += Import-Csv -Path $acsvfile
         }
 
-        $allBaselineSettings | Where-Object {$_.ScriptBlock -ne ''} | ForEach-Object {
-            $_.ItemName
+        if (($allBaselineSettings |Get-Member -MemberType 'NoteProperty' | Select-Object -ExpandProperty 'Name') -notcontains 'Actual Value') {
+            $allBaselineSettings | Add-Member -Name "Actual Value" -MemberType NoteProperty
+        }
+        if (($allBaselineSettings |Get-Member -MemberType 'NoteProperty' | Select-Object -ExpandProperty 'Name') -notcontains 'Check Result') {
+            $allBaselineSettings | Add-Member -Name "Check Result" -MemberType NoteProperty
+        }
+
+        $allBaselineSettings | Where-Object {$_.Script -ne '' -and $_.'Baseline Value' -ne ''} | ForEach-Object {
+            $ScriptReturn = &([Scriptblock]::Create($_.Script))
+            $_.'Actual Value' = $ScriptReturn['Actual Value']
+            $_.'Check Result' = $ScriptReturn['Check Result']
         }
     }
 
     end {
+        $allBaselineSettings | Export-Csv -Path "$env:TEMP\$env:COMPUTERNAME-$(Get-Date -UFormat "%Y%m%d-%H%M%S").csv" -NoTypeInformation
     }
 }
