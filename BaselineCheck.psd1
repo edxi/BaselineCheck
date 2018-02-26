@@ -52,6 +52,10 @@ PowerShellVersion = '5.0'
 
 # Modules that must be imported into the global environment prior to importing this module
 # RequiredModules = @()
+RequiredModules = @(@{ModuleName = 'BaselineManagement'; RequiredVersion = '2.8.8815'; },
+               @{ModuleName = 'DSCEA'; RequiredVersion = '1.2.0.0'; },
+               @{ModuleName = 'PSExcel'; RequiredVersion = '1.0.2'; })
+
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
