@@ -6,6 +6,7 @@ The purpose of this script which is provides windows baseline check functions.
 
 ## Features
 
+* Compare pre-defined .xlsx file with DSCEA csv output to check baseline items.
 * Find a Group Policy setting in an xml RSOP file.
 * Compare GP settings.
   * To reads a given GP setting in a specifying format file.
@@ -16,6 +17,50 @@ The purpose of this script which is provides windows baseline check functions.
 * Export compliance check to a report csv as a result.
 
 ## Examples
+
+### Compare DSCEA csv out
+
+This example shows fills up a predefined baseline excel file by following procedures:
+
+1. Generate a .mof file by convert a GPO.
+2. Scan the localhost by this .mof file and generate DSCEA .xml file.
+3. Convert the .xml file to .csv report.
+4. Compare the .csv report to fill up baseline excel.
+
+```powershell
+PS C:\Users\edxi> ConvertFrom-GPO -Path C:\baselinegpo\
+
+    Directory: C:\Users\edxi\Output
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        2/25/2018  11:13 AM         253530 localhost.mof
+
+PS C:\Users\edxi> Start-DSCEAscan -MofFile .\Output\localhost.mof -ComputerName localhost
+
+    Directory: C:\Users\edxi
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        2/25/2018  11:14 AM        1147916 results.20180225-1113-42.xml
+
+PS C:\Users\edxi> Convert-DSCEAresultsToCSV .\results.20180225-1113-42.xml
+
+    Directory: C:\Users\edxi
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----        2/25/2018  11:14 AM          40862 output.csv
+
+PS C:\Users\edxi> Import-Module PSExcel
+PS C:\Users\edxi> Compare-DSCEAcsv -xlsxfile C:\Users\edxi\baseline.xlsx -csvfile C:\Users\edxi\output.csv
+```
+
+As above procedure, at least following three external module is needed.
+
+* The step 1 needs [BaselineManagement](https://github.com/Microsoft/BaselineManagement).
+* Step 2 and 3 needs [DSCEA](https://github.com/Microsoft/DSCEA).
+* Step 4 needs [PSExcel](https://github.com/RamblingCookieMonster/PSExcel).
 
 ### Find a GP setting
 

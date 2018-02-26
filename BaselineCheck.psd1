@@ -12,7 +12,7 @@
 RootModule = 'BaselineCheck.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '0.1.1'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,10 +30,10 @@ CompanyName = 'Unknown'
 Copyright = '(c) 2018 edxi. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Baseline check as compare gpresult xml, etc.'
+Description = 'Baseline check by compare DSCEA report.'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '3.0'
+PowerShellVersion = '5.0'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''
@@ -70,7 +70,7 @@ PowerShellVersion = '3.0'
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 # FunctionsToExport = '*'
-FunctionsToExport = @('Compare-Rsop','Compare-ScriptOutput','Find-RsopSetting','Find-XmlNodes')
+FunctionsToExport = @('Compare-DSCEAcsv','Compare-Rsop','Compare-ScriptOutput','Find-RsopSetting','Find-XmlNodes')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 # CmdletsToExport = '*'
@@ -105,7 +105,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/edxi/BaselineCheck/'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://github.com/edxi/BaselineCheck/Images/PowerShell_icon.png'
+        IconUri = 'https://github.com/edxi/BaselineCheck/blob/master/Images/PowerShell_icon.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = 'https://github.com/edxi/BaselineCheck/releases'

@@ -107,7 +107,12 @@ function Find-XmlNodes {
                 }
                 else {
                     #we are done.  We already found the $Where, and now we have found the $Return.
-                    return $valueWeFound
+                    if (! [String]::IsNullOrEmpty($node.InnerXml)) {
+                        Find-XmlNodes -nodes $node.ChildNodes -foundWhere $foundWhere -Where $Where -Is $Is -Return $Return
+                    }
+                    else {
+                        return $valueWeFound
+                    }
                 }
             }
 
