@@ -13,4 +13,7 @@
     'PSDeploy' = @{ DependencyType = 'PSGalleryNuget' }
     'BuildHelpers' = @{ DependencyType = 'PSGalleryNuget' }
     'Pester' = @{ DependencyType = 'PSGalleryNuget' }
+    'BaselineManagement' = @{ DependencyType = 'PSGalleryNuget' }
+    'DSCEA' = @{ DependencyType = 'PSGalleryNuget' }
+    'PSExcel' = @{ DependencyType = 'PSGalleryNuget' }
 }
